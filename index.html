@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> | NASKOU </title>
+    <meta name="description" content="Personal website and database of Juraj Onuska (also known under moniker Naskou). The purpose of website is to provide common place for displaying Juraj's work as an artist, minimalist and software developer.">
+    <meta name="keywords" content="juraj, onuska, nthe, naskou, slovakia, audio, sound, music, production, digital, art, design, fft, processing, p5js, webgl, threejs, python, javascript, portfolio, programming, developer">
+    <style>
+        ::selection {
+            background: transparent;
+        }
+        
+        body {
+            color: #555;
+            background: white;
+            background-size: cover;
+            height: 100%;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 2.0em;
+            min-height: 600px;
+            min-width: 600px;
+            overflow: hidden;
+        }
+        
+        #loader_webgl_frame {
+            width: 100%;
+            height: 100%;
+            background: white;
+            position: absolute;
+            opacity: 0;
+        }
+        
+        #home{
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .song-info {
+            display: inline-block;
+        }
+        
+        .song-name {
+            top: 2px;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        .song-unit:hover{
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        #nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            padding: 10px;
+            width: 7%;
+            height: 100%;
+            overflow: visible;
+            background: rgba(0, 0, 0, 0.7);
+            text-align: center;
+            line-height: 1.5em;
+            color: #ffffff;
+            display: block;
+            opacity: 0;
+            z-index: 2;
+            min-width: 115px;
+        }
+        
+        .external {
+            height: 128px;
+            z-index: 5;
+            border: none;
+        }
+        
+        .active {
+            font-weight: bold;
+        }
+
+        #icons {
+            position: absolute;
+            width: 38px;
+            overflow: hidden;
+            background: transparent;
+            right: 25px;
+            float: right;
+            margin-bottom: 10%;
+            display: none;
+        }
+        
+        #icons img {
+            border: none;
+        }
+
+        #description {
+            position: absolute;
+            margin-bottom: 15%;
+            background: transparent;
+            right: 70px;
+            top: 150px;
+            opacity: 0;
+        }
+        
+        #selector {
+            position: relative;
+            float: right;
+            width: 4px;
+            height: 4px;
+            background: #ffffff;
+            opacity: 0.0;
+            border-radius: 4px;
+        }
+        
+        main {
+            position: absolute;
+            left: 10%;
+            top: 0%;
+            overflow: visible;
+            background: transparent;
+            height: 90%;
+            width: 100%;
+            text-align: justify;
+            overflow-y: scroll;
+        }
+        
+        #soundcloud_logo {
+            background: transparent;
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            width: 104px;
+            height: 32px;
+            opacity: 0;
+        }
+        
+        .innertube {
+            margin: 15px;
+        }
+        
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        nav ul a {
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        nav ul li {
+            cursor: pointer;
+        }
+        
+        * html body {
+            padding: 0 0 0 230px;
+        }
+        
+        * html main {
+            height: 100%;
+            width: 100%;
+        }
+        
+        #processing {
+            opacity: 1;
+            display: none;
+        }
+        
+        main .innertube .sound-unit {
+            width: 97%;
+            height: 14px;
+            display: block;
+            padding: 4px;
+            margin-bottom: 5px;
+            background-color: transparent;
+            opacity: 1;
+            position: relative;
+        }
+
+        .sound-unit:hover{
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        nav ul li:hover{
+            font-weight: bold;
+        }
+
+        main .innertube .sound-unit img {
+            height: 16px;
+            vertical-align: middle;
+            top: 0px;
+            left: 10px;
+            position: relative;
+        }
+
+        #nav_ul{
+            margin-top: 250px;
+        }
+
+        .visual-unit {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            position: absolute;
+            background: transparent;
+            height: 100%;
+            width: 10px;
+        }
+
+        .visual-unit-name {
+            position: absolute;
+            float: left;
+            border-left: solid 1px;
+            padding-left: 10px;
+        }
+
+        .visual-unit-name:hover{
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .fingertip:hover {
+            cursor: pointer;
+        }
+        
+        #sketches {
+            top: 28px;
+            width: 100%;
+            height: 100%;
+            left: -18%;
+            position: absolute;
+        }
+
+        .full_visual_player {
+            top: 30%;
+            left: 60%;
+            position: absolute;
+            z-index: 999;
+        }
+        
+        .small_visual_player {
+            top: 20px;
+            right: 30px;
+            position: absolute;
+            z-index: 999;
+        }
+
+        #webgl_iframe {
+            overflow: visible;
+            width: 100%;
+            height: 100%;
+            left: -18%;
+            position: absolute;
+        }
+        
+        #webgl_hint {
+            position: absolute;
+            margin: 0 auto;
+            top: 10px;
+            left: 25px;
+            opacity: 0;
+            z-index: -2;
+        }
+        
+        #visualisation {
+            position: absolute;
+            left: 10px;
+            top: -3px;
+            z-index: 100;
+        }
+        
+        #visualisation div {
+            position: absolute;
+            width: 12px;
+            height: 2px;
+            background: transparent;
+            border: solid 1px;
+        }
+
+        #audio_control{
+            position: absolute;
+            bottom: 30px;
+            left: 48px;
+            z-index: 20;
+            display: block;
+        }
+
+        #audio_control img{
+            height: 40px;
+            background: transparent;
+        }
+
+        .fullscreen-bg {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -100;
+        }
+
+        .fullscreen-bg__video {
+            position: absolute;
+            height: 100%;
+        }
+
+        .pause_icon, .play_icon, .audio_off, .audio_off_on, .linkedin, .github, .soundcloud{
+            background: url("media/sprites.png") no-repeat;
+        }
+        
+        .play_icon{
+            background-position: -50px 0;
+            width: 50px;
+            height: 50px;
+        }
+
+        .linkedin{
+            background-position: 0 0;
+            width: 30px;
+            height: 30px;
+            display: block;
+        }
+
+        .github{
+            background-position: -30px 0;
+            width: 30px;
+            height: 30px;
+            display: block;
+        }
+
+        .soundcloud{
+            background-position: -60px 0;
+            width: 30px;
+            height: 30px;
+            display: block;
+        }
+
+        .audio_off_on{
+            background-position: -90px 0;
+            width: 40px;
+            height: 40px;
+        }
+
+        .audio_off{
+            background-position: -130px 0;
+            width: 40px;
+            height: 40px;
+        }
+
+        .pause_icon{
+            background-position: -170px 0;
+            width: 16px;
+            height: 16px;
+        }
+
+        .play_icon{
+            background-position: -186px 0;
+            width: 16px;
+            height: 16px;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div id="visualisation"></div>
+    <div id="loader_webgl_frame"></div>
+    <div id="soundcloud_logo"><img src="/personal_website/media/powered_by_soundcloud.png" /></div>
+    <div id="audio_control" class="audio_off" data-status=1></div>
+    <canvas id="myCanvas" class="full_visual_player" width="100px" height="100px"></canvas>
+    <main>
+        <div class="innertube content-box" id="sound_box"></div>
+        <div class="innertube content-box" id="device_box"></div>
+        <span id="webgl_hint">Use your <b> mouse </b> for interaction.</p></span>
+        <div class="innertube content-box" id="visual_box">
+            <iframe id="sketches" frameborder="0"></iframe>
+        </div>
+        <div class="innertube content-box" id="webgl_box">
+            <iframe id="webgl_iframe" frameborder="0"></iframe>
+        </div>
+        
+        <div class="innertube content-box" id="cv_box">
+            <p id="processing">
+                ?
+            </p>
+        </div>
+    </main>
+    <nav id="nav">
+        <div id="selector"></div>
+        <div class="innertube">
+            <ul id="nav_ul">
+                <li id="home">Juraj<br>Onuska</li>
+                <li><b> - naskou - </b></li>
+                <br>
+                <li id="sound">audio </li>
+                <li id="visual">canvas </li>
+                <li id="webgl">webgl </li>
+                <!--<li id="cv">author </li>-->
+            </ul>
+        </div>
+        <div id="icons">
+            <br>
+            <a href="https://www.soundcloud.com/naskou" class="soundcloud"/></a>
+            <a href="https://www.linkedin.com/in/juraj-onu%C5%A1ka-62671698" class="linkedin"></a>
+            <a href="https://www.github.com/nthe" class="github"/></a>
+        </div>
+        <div id="description">asd</div>
+        
+    </nav>
+    
+    <div class="fullscreen-bg">
+        <video loop muted autoplay class="fullscreen-bg__video">
+            <source src="media/bird.m4v" type="video/mp4">
+        </video>
+    </div>
+    <script src="media/move.min.js"></script>
+    <script type="text/javascript">
+
+        var main_content = function() {
+            var CONTENT_BOX_SOUND = document.getElementById("sound_box");
+            var CONTENT_BOX_VISUAL = document.getElementById("visual_box");
+            var CONTENT_BOX_WEBGL = document.getElementById("webgl_box");
+            var CONTENT_BOX_CV = document.getElementById("cv_box");
+            var VISUALISATION = document.getElementById("visualisation");
+            var SELECTOR = document.getElementById("selector");
+            var NAV = document.getElementsByTagName("ul")[0];
+            var NAVB = document.getElementById("nav");
+            var ICONS = document.getElementById("icons");
+            var AC = document.getElementById("audio_control");
+            var MAIN = document.getElementsByTagName("main")[0];
+            var SC_LOGO = document.getElementById("soundcloud_logo");
+            var WEBGL_HINT = document.getElementById("webgl_hint");
+            var VID = document.getElementsByClassName("fullscreen-bg")[0];
+            var VISUAL_PLAYER = document.getElementById("myCanvas");
+
+            var RENDERED = {
+                'home': false,
+                'sound': false,
+                'visual': false,
+                'webgl': false,
+                'cv': false
+            };
+
+            function getEventTarget(e) {
+                e = e || window.event;
+                return e.target || e.srcElement; 
+            }
+
+            NAV.addEventListener('click', function(event){
+                event.preventDefault();
+                var target = getEventTarget(event);
+                var id = target.getAttribute('id');
+                var pos = target.offsetTop;
+                move(SELECTOR).set("margin-top", pos - 2 + "px").set("opacity", 1).duration(speed).end();
+                if (!RENDERED[id]) fetch_content(id.toString());
+                else show_rendered(id);
+            });
+
+            function adjust_ui(_left, _top, _width, _left_back, _navigation_width, _sc_logo_opacity, _video_opacity, _webgl_hint_opacity) {
+                _sc_logo_opacity = _sc_logo_opacity || 0;
+                _video_opacity = _video_opacity || 0;
+                _webgl_hint_opacity = _webgl_hint_opacity || 0;
+                var _align = _align || 'right';
+
+                if(_video_opacity == 1){
+                    NAVB.style.background = "rgba(0, 0, 0, 0.7)";
+                    SELECTOR.style.background = "#fff";
+                    NAV.style.textAlign = 'center';
+                    SELECTOR.style.opacity = 0;
+                    ICONS.style.display = 'none';
+                    NAV.style.color = "#fff";
+                    AC.style.display = 'block';
+                    audio_2.pause();
+                } else {
+                    NAV.style.color = "#000";
+                    SELECTOR.style.background = "#000";
+                    NAV.style.textAlign = 'right';
+                    SELECTOR.style.opacity = 1;
+                    ICONS.style.display = 'block';
+                    NAVB.style.background = "rgba(0, 0, 0, 0)";
+                    AC.style.display = 'none';
+                }
+
+                
+                move(NAVB).set('width', _navigation_width).duration(speed).end();
+                move(MAIN).set('left', _left).set('top', _top).set('width', _width).duration(speed).end();
+                move(WEBGL_HINT).set('opacity', _webgl_hint_opacity).duration(speed / 2).end();
+                move(SC_LOGO).set('opacity', _sc_logo_opacity).duration(speed).end();
+                move(VID).set('opacity', _video_opacity).duration(speed).end();
+            }
+
+
+            AC.addEventListener('click', function(){
+                var status = AC.getAttribute('data-status');
+                if(status == "1"){
+                    AC.className = "audio_off_on";
+                    audio.pause();
+                    AC.setAttribute('data-status', 0);
+                } else {
+                    AC.className = "audio_off";
+                    audio.play();
+                    AC.setAttribute('data-status', 1);
+                }
+            });
+
+            function show_rendered(id) {
+                var a = document.getElementsByClassName("content-box");
+                for(var i = 0; i < a.length; i++) a[i].style.display = 'none';
+
+                switch (id) {
+                    case "home":
+                    {
+                        adjust_ui("18%", "0%", "100%", "15.3%", "7%", 0, 1);
+                        audio.volume = 0.25;
+                        if(VISUAL_PLAYER.className != 'small_visual_player'){
+                            VISUAL_PLAYER.width = 50;
+                            VISUAL_PLAYER.height = 50;
+                            VISUAL_PLAYER.className = 'small_visual_player';
+                        }
+                        audio.play();
+                        break;
+                    }
+                    case "sound":
+                    {
+                        adjust_ui("33%", "5%", "68%", "30.3%", "30%", 0.7);
+                        CONTENT_BOX_SOUND.style.display = 'block';
+                        VISUALISATION.style.display = 'block';
+                        VISUAL_PLAYER.width = 300;
+                        VISUAL_PLAYER.height = 300;
+                        VISUAL_PLAYER.className = 'full_visual_player';
+                        audio.volume = 0;
+                        audio.pause();
+                        break;
+                    }
+                    case "visual":
+                    {
+                        adjust_ui("18%", "0%", "100%", "15.3%", "15%", 0, 0, 1);
+                        CONTENT_BOX_VISUAL.style.display = 'block';
+                        if(VISUAL_PLAYER.className != 'small_visual_player'){
+                            VISUAL_PLAYER.width = 50;
+                            VISUAL_PLAYER.height = 50;
+                            VISUAL_PLAYER.className = 'small_visual_player';
+                        }
+                        audio.volume = 0;
+                        audio.pause();
+                        break;
+                    }
+                    case "webgl":
+                    {
+                        adjust_ui("18%", "0%", "100%", "15.3%", "15%", 0, 0, 1);
+                        CONTENT_BOX_WEBGL.style.display = 'block';
+                        if(VISUAL_PLAYER.className != 'small_visual_player'){
+                            VISUAL_PLAYER.width = 50;
+                            VISUAL_PLAYER.height = 50;
+                            VISUAL_PLAYER.className = 'small_visual_player';
+                        }
+                        audio.volume = 0;
+                        audio.pause();
+                        break;
+                    }
+                    case "cv":
+                    {
+                        adjust_ui("33%", "5%", "100%", "30.3%", "30%", 0, 0, 0);
+                        CONTENT_BOX_CV.style.display = 'block';
+                        if(VISUAL_PLAYER.className != 'small_visual_player'){
+                            VISUAL_PLAYER.width = 50;
+                            VISUAL_PLAYER.height = 50;
+                            VISUAL_PLAYER.className = 'small_visual_player';
+                        }
+                        audio.volume = 0;
+                        audio.pause();
+                        break;
+                    }
+                }
+            }
+
+            function fetch_content(target) {
+                if (target == "webgl") serve_webgl_content();
+                else if (target == "visual") serve_visual_content();
+                else if (target == "sound") serve_sound_content();
+                else if (target == "cv"){
+                    document.getElementById("processing").style.display = "block";
+                    show_rendered(target);
+                    RENDERED[target] = true;
+                } 
+                else if (target == "home") {
+                    show_rendered(target);
+                    RENDERED[target] = true;
+                }
+            }
+
+            var request = function (_url, _success) {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState == 4 && xmlHttp.status % 200 < 200) _success(xmlHttp.responseText);
+                    if (xmlHttp.status > 399) console.log('error on request @ ' + _url);
+                };
+                xmlHttp.open("GET", _url, false);
+                xmlHttp.send();
+            };
+
+            var speed = "0.5s";
+            move(NAVB).set('opacity', 1).duration(speed).end();
+
+            var audio = new Audio('media/auddd.mp3');
+            // var audio = new Audio();
+            audio.volume = 0.0;
+            audio.loop = true;
+            audio.autoplay = true;
+
+            /* Visual player ------------------------------------------------------------ */
+            
+            function visual_player(_audio_el, _canvas_id){    
+                var c = document.getElementById(_canvas_id);
+                var ctx = c.getContext("2d");
+                var MP = Math.PI;
+                
+
+                Number.prototype.map = function (in_min, in_max, out_min, out_max) {
+                    return (this - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+                }
+                
+                var d = 0;
+
+                function update(ae) {
+                    requestAnimationFrame(update);
+                    if(_audio_el.buffered.length && !_audio_el.paused){
+                        d = _audio_el.duration + .001;
+                        ctx.clearRect(0, 0, c.width, c.height);
+
+                        ctx.font = "12px monospace";
+                        
+                        ctx.lineWidth = c.width / 10;
+                        ctx.beginPath();
+                        ctx.arc(c.width / 2, c.height / 2, c.width / 3, 1.5 * MP, _audio_el.buffered.end(0).map(0, d, 0 - MP / 2, 1.5 * MP));
+                        ctx.strokeStyle = '#eee';
+                        ctx.stroke();
+
+                        ctx.lineWidth = c.width / 10;
+                        ctx.beginPath();
+                        ctx.arc(c.width / 2, c.height / 2, c.width / 3, 1.5 * MP, _audio_el.currentTime.map(0, d , 0 - MP / 2, 1.5 * MP) + 0.025);
+                        ctx.strokeStyle = '#aaa';
+                        ctx.stroke();
+
+                        ctx.lineWidth = c.width / 10;
+                        ctx.beginPath();
+                        ctx.arc(c.width / 2, c.height / 2, c.width / 3, 1.5 * MP - 0.01, 1.5 * MP + 0.01);
+                        ctx.strokeStyle = '#555';
+                        ctx.stroke();
+
+                        if(c.width > 100) ctx.fillText("time: " + (_audio_el.currentTime).toPrecision(3) + " s", c.width / 2 - 30, c.height / 2 + 5);
+                        if(c.width > 100) ctx.fillText("remn: " + (d - _audio_el.currentTime).toPrecision(3) + " s", c.width / 2 - 30, c.height / 2 + 20);
+                        if(c.width > 100) ctx.fillText("buff: " + ((_audio_el.buffered.end(0) / d) * 100.).toPrecision(3) + " %", c.width / 2 - 30, c.height / 2 + 35);
+                    }
+                };
+                update(_audio_el);
+            }
+
+            /* Visualizer ------------------------------------------------------------ */
+            
+            /* 
+            // var context;
+            // if (typeof AudioContext !== "undefined") {
+            //   context = new AudioContext();
+            // } else if (typeof webkitAudioContext !== "undefined") {
+            //   context = new webkitAudioContext();
+            // } else {
+            //     document.getElementsByClassName("hideIfNoApi").style.display = 'none';
+            //     document.getElementsByClassName("showIfNoApi").style.display = 'block';
+            //   return;
+            // }
+
+            // var lastTime = 0;
+            // var vendors = ['ms', 'moz', 'webkit', 'o'];
+            // for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+            //   window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+            //   window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
+            //     || window[vendors[x] + 'CancelRequestAnimationFrame'];
+            // }
+
+            // window.requestAnimationFrame = function (callback, element) {
+            //     var currTime = new Date().getTime();
+            //     var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            //     var id = window.setTimeout(function () { callback(currTime + timeToCall); },
+            //       timeToCall);
+            //     lastTime = currTime + timeToCall;
+            //     return id;
+            //   };
+
+            // if (!window.cancelAnimationFrame)
+            //   window.cancelAnimationFrame = function (id) { clearTimeout(id); };
+
+            // var analyser = context.createAnalyser();
+            // analyser.connect(context.destination);
+            // analyser.fftSize = 32;
+            // var frequencyData = new Uint8Array(analyser.frequencyBinCount);            
+            // var visualisation = document.getElementById('visualisation');
+            // var barSpacingPercent = 30 / analyser.frequencyBinCount;
+
+            // for (var i = 0; i < analyser.frequencyBinCount; i++) {
+            //     var bar_div = document.createElement("div");
+            //     bar_div.style.left = i * barSpacingPercent * 10 + "px";
+            //     bar_div.style.opacity = 1;
+            //     visualisation.appendChild(bar_div);                
+            // }
+
+            // function update(audio_el) {
+            //   requestAnimationFrame(update);
+            //   analyser.getByteFrequencyData(frequencyData);
+
+            //   if(!audio_el.paused) {
+            //     for(var i = 0; i < analyser.frequencyBinCount; i++){
+            //         visualisation.childNodes[i].style.height = (frequencyData[i]) * 0.5 + 'px';
+            //     }
+            //   }
+            // };
+            */
+
+            /* SOUNDS SECTION ------------------------------------------------------------ */
+            var TRACKS_COUNT = 0;
+            var TRACKS = [];
+            var audio_2 = new Audio();
+            audio_2.crossOrigin = "anonymous";
+            audio_2.volume = 0.85;
+            /*
+            // context.createMediaElementSource(audio_2).connect(analyser);
+            // update(audio_2);
+            */
+            visual_player(audio_2, "myCanvas");
+
+            function serve_sound_content() {
+                request("https://api.soundcloud.com/users/731302/tracks?client_id=522c4502ec926a3aade851669738d8e7", function (load) {
+                    var data = [];
+                    load = JSON.parse(load);
+                    for (var i = 0; i < load.length; i++) {
+                        if (load[i].tag_list.indexOf('wbsnd') > -1)
+                            data.push(load[i]);
+                    }
+
+                    TRACKS_COUNT = data.length;
+                    for (i = 0; i < TRACKS_COUNT; i++) {
+                        var src_load = data[i].stream_url + "?client_id=522c4502ec926a3aade851669738d8e7";
+                        var str = 
+                            "<span data-playing=0 data-duration='" + data[i].duration + "' data-track='" + src_load + "' class='play_icon'>" +
+                            "<span class='song-name'>" + data[i].title + "</span>";
+                        var temp = document.createElement('div');
+                        temp.className = 'song-unit';
+                        temp.innerHTML = str;
+                        CONTENT_BOX_SOUND.appendChild(temp);
+                    }
+
+                    show_rendered('sound');
+                    RENDERED['sound'] = true;
+                });
+
+                CONTENT_BOX_SOUND.addEventListener('click', function(event){ 
+                    event.preventDefault();
+                    var target = getEventTarget(event);
+                    
+                    target = target.parentNode;
+                    
+                    if(target.childNodes.length == 2){
+                        for(var i = 0; i < TRACKS_COUNT; i++) CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";
+
+                    if(target.getAttribute('data-playing') == '1'){
+                        target.className = "play_icon";
+                        target.setAttribute("data-playing", '0');
+                        audio_2.pause();
+                    } else {
+                        audio_2.src = target.getAttribute('data-track');
+                        target.className = "pause_icon active";
+                        target.setAttribute("data-playing", '1');
+                        audio_2.autoplay = true;
+                    }
+                
+                }
+            }
+                )
+                
+            }
+
+            /* VISUAL SECTION ------------------------------------------------------------ */
+            var sketches = document.getElementById("sketches");
+
+            function serve_visual_content() {
+                request("https://api.github.com/repos/nthe/p5js/contents", function (load) {
+                        var data = [];
+                        load = JSON.parse(load);
+
+                        for (var i = 0; i < load.length; i++) {
+                            if (['libraries', 'empty-example', 'README.md'].indexOf(load[i].name) < 0)
+                                data.push(load[i].name);
+                        }
+
+                        var visuals_box = document.createElement('div');
+                        visuals_box.className = 'visual-unit';
+                        CONTENT_BOX_VISUAL.appendChild(visuals_box);
+
+                        for (i = 0; i < data.length; i++) {
+                            var d = "<br><span class='visual-unit-name fingertip'>" + data[i] + "</span>";
+                            var dev_span = document.createElement('div');
+                            dev_span.innerHTML = d;
+                            visual_box.innerHTML += dev_span.innerHTML;
+                        }
+                        show_rendered('visual');
+                        RENDERED['visual'] = true;
+                    }
+                );
+
+                CONTENT_BOX_VISUAL.addEventListener('click', function(event){
+                    event.preventDefault();
+                    var target = getEventTarget(event);
+                    document.getElementById("sketches").src = "https://nthe.github.io/p5js/" + target.innerHTML + "/";
+                })
+            }
+
+            /* WEBGL SECTION ------------------------------------------------------------ */
+            var webgl_iframe = document.getElementById("webgl_iframe");
+
+            function serve_webgl_content() {
+                request("https://api.github.com/repos/nthe/webgl/contents", function (load) {
+                            var data = [];
+                            load = JSON.parse(load);
+                            
+                            for (var i = 0; i < load.length; i++) {
+                                if (['libs', 'README.md', '.gitignore'].indexOf(load[i].name) < 0)
+                                    data.push(load[i].name);
+                            }
+
+                            var visuals_box = document.createElement('div');
+                            visuals_box.className = 'visual-unit';
+                            CONTENT_BOX_WEBGL.appendChild(visuals_box);
+
+                            for (i = 0; i < data.length; i++) {
+                                var d = "<br><span class='visual-unit-name fingertip'>" + data[i] + "</span>";
+                                var dev_span = document.createElement('div');
+                                dev_span.innerHTML = d;
+                                visuals_box.innerHTML += dev_span.innerHTML;
+                            }
+
+                            show_rendered('webgl');
+                            RENDERED['webgl'] = true;
+                        }
+                );
+
+                CONTENT_BOX_WEBGL.addEventListener('click', function(event){
+                    event.preventDefault();
+                    var target = getEventTarget(event);
+                    webgl_iframe.setAttribute("src", "https://nthe.github.io/webgl/" + target.innerHTML + "/");
+                })
+            }
+        };
+            
+        function ready(fn) {
+            if (document.readyState != 'loading'){
+                fn();
+            } else {
+                document.addEventListener('DOMContentLoaded', fn);
+            }
+        }
+
+        ready(main_content);
+
+    </script>
+</body>
+</html>
