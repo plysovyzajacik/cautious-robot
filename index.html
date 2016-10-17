@@ -22,15 +22,7 @@
             min-width: 600px;
             overflow: hidden;
         }
-        
-        #loader_webgl_frame {
-            width: 100%;
-            height: 100%;
-            background: white;
-            position: absolute;
-            opacity: 0;
-        }
-        
+
         #home{
             font-size: 20px;
             font-weight: bold;
@@ -51,25 +43,6 @@
             font-weight: bold;
         }
 
-        #nav {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            padding: 10px;
-            width: 7%;
-            height: 100%;
-            overflow: visible;
-            background: rgba(0, 0, 0, 0.7);
-            text-align: center;
-            line-height: 1.5em;
-            color: #ffffff;
-            display: block;
-            opacity: 1;
-            z-index: 2;
-            min-width: 115px;
-        }
-        
         .external {
             height: 128px;
             z-index: 5;
@@ -80,43 +53,9 @@
             font-weight: bold;
         }
 
-        #icons {
-            position: absolute;
-            width: 38px;
-            overflow: hidden;
-            background: transparent;
-            right: 25px;
-            float: right;
-            margin-bottom: 10%;
-            display: none;
-        }
-        
-        #icons img {
-            border: none;
-        }
-
-        #description {
-            position: absolute;
-            margin-bottom: 15%;
-            background: transparent;
-            right: 70px;
-            top: 150px;
-            opacity: 0;
-        }
-        
-        #selector {
-            position: relative;
-            float: right;
-            width: 4px;
-            height: 4px;
-            background: #ffffff;
-            opacity: 0.0;
-            border-radius: 4px;
-        }
-        
         main {
             position: absolute;
-            left: 30%;
+            left: 25%;
             top: 10%;
             overflow: visible;
             background: transparent;
@@ -133,7 +72,7 @@
             bottom: 20px;
             width: 104px;
             height: 32px;
-            opacity: 0;
+            opacity: 0.5;
         }
         
         .innertube {
@@ -167,12 +106,7 @@
             height: 100%;
             width: 100%;
         }
-        
-        #processing {
-            opacity: 1;
-            display: none;
-        }
-        
+
         main .innertube .sound-unit {
             width: 97%;
             height: 14px;
@@ -189,10 +123,6 @@
             cursor: pointer;
         }
         
-        nav ul li:hover{
-            font-weight: bold;
-        }
-
         main .innertube .sound-unit img {
             height: 16px;
             vertical-align: middle;
@@ -201,41 +131,8 @@
             position: relative;
         }
 
-        #nav_ul{
-            margin-top: 250px;
-        }
-
-        .visual-unit {
-            margin-top: 10px;
-            margin-bottom: 10px;
-            position: absolute;
-            background: transparent;
-            height: 100%;
-            width: 10px;
-        }
-
-        .visual-unit-name {
-            position: absolute;
-            float: left;
-            border-left: solid 1px;
-            padding-left: 10px;
-        }
-
-        .visual-unit-name:hover{
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         .fingertip:hover {
             cursor: pointer;
-        }
-        
-        #sketches {
-            top: 28px;
-            width: 100%;
-            height: 100%;
-            left: -18%;
-            position: absolute;
         }
 
         .full_visual_player {
@@ -243,30 +140,6 @@
             left: 60%;
             position: absolute;
             z-index: 999;
-        }
-        
-        .small_visual_player {
-            top: 20px;
-            right: 30px;
-            position: absolute;
-            z-index: 999;
-        }
-
-        #webgl_iframe {
-            overflow: visible;
-            width: 100%;
-            height: 100%;
-            left: -18%;
-            position: absolute;
-        }
-        
-        #webgl_hint {
-            position: absolute;
-            margin: 0 auto;
-            top: 10px;
-            left: 25px;
-            opacity: 0;
-            z-index: -2;
         }
         
         #visualisation {
@@ -284,86 +157,6 @@
             border: solid 1px;
         }
 
-        #audio_control{
-            position: absolute;
-            bottom: 30px;
-            left: 48px;
-            z-index: 20;
-            display: block;
-        }
-
-        #audio_control img{
-            height: 40px;
-            background: transparent;
-        }
-
-        .fullscreen-bg {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            overflow: hidden;
-            z-index: -100;
-        }
-
-        .fullscreen-bg__video {
-            position: absolute;
-            height: 100%;
-        }
-        
-        .play_icon{
-            background-position: -50px 0;
-            width: 50px;
-            height: 50px;
-        }
-
-        .linkedin{
-            background-position: 0 0;
-            width: 30px;
-            height: 30px;
-            display: block;
-        }
-
-        .github{
-            background-position: -30px 0;
-            width: 30px;
-            height: 30px;
-            display: block;
-        }
-
-        .soundcloud{
-            background-position: -60px 0;
-            width: 30px;
-            height: 30px;
-            display: block;
-        }
-
-        .audio_off_on{
-            background-position: -90px 0;
-            width: 40px;
-            height: 40px;
-        }
-
-        .audio_off{
-            background-position: -130px 0;
-            width: 40px;
-            height: 40px;
-        }
-
-        .pause_icon{
-            background-position: -170px 0;
-            width: 16px;
-            height: 16px;
-        }
-
-        .play_icon{
-            background-position: -186px 0;
-            width: 16px;
-            height: 16px;
-        }
-
-
     </style>
 </head>
 
@@ -376,34 +169,17 @@
 
     </main>
 
-
-    <!--<script src="media/move.min.js"></script>-->
     <script type="text/javascript">
 
         var main_content = function() {
             var CONTENT_BOX_SOUND = document.getElementById("sound_box");
-            var CONTENT_BOX_VISUAL = document.getElementById("visual_box");
-            var CONTENT_BOX_WEBGL = document.getElementById("webgl_box");
-            var CONTENT_BOX_CV = document.getElementById("cv_box");
+            
             var VISUALISATION = document.getElementById("visualisation");
             var SELECTOR = document.getElementById("selector");
             var NAV = document.getElementsByTagName("ul")[0];
-            var NAVB = document.getElementById("nav");
-            var ICONS = document.getElementById("icons");
-            var AC = document.getElementById("audio_control");
             var MAIN = document.getElementsByTagName("main")[0];
             var SC_LOGO = document.getElementById("soundcloud_logo");
-            var WEBGL_HINT = document.getElementById("webgl_hint");
-            var VID = document.getElementsByClassName("fullscreen-bg")[0];
             var VISUAL_PLAYER = document.getElementById("myCanvas");
-
-            var RENDERED = {
-                'home': false,
-                'sound': false,
-                'visual': false,
-                'webgl': false,
-                'cv': false
-            };
 
             function getEventTarget(e) {
                 e = e || window.event;
@@ -538,8 +314,9 @@
             audio_2.volume = 0.85;
             
             context.createMediaElementSource(audio_2).connect(analyser);
+
+            // COMMENT TWO LINES BELOW TO DISABLE DYNAMIC ELEMENTS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             update(audio_2);
-            
             visual_player(audio_2, "myCanvas");
 
             function serve_sound_content() {
