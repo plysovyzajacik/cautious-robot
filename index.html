@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title> | NASKOU </title>
+    <title> Your title goes here ... </title>
     <meta name="description" content="">
     <meta name="keywords" content="">
     <style>
@@ -16,7 +16,7 @@
             background-size: cover;
             height: 100%;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 12px;
             line-height: 2.0em;
             min-height: 600px;
             min-width: 600px;
@@ -51,6 +51,7 @@
         
         .active {
             font-weight: bold;
+            text-decoration: underline;    
         }
 
         main {
@@ -351,16 +352,12 @@
                     event.preventDefault();
                     var target = getEventTarget(event);
 
-                    // return if bad element clicked
+                    // return if bad element clicked, not so cool workaround though :/
                     if(target.className == "song-unit") return;
                     
                     target = target.parentNode;
                     
                     for(var i = 0; i < CONTENT_BOX_SOUND.childNodes.length; i++) { CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";}
-
-                    if(target.childNodes.length == 2){
-                        for(var i = 0; i < CONTENT_BOX_SOUND.childNodes.length; i++) CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";
-                    }
                     
                     if(target.getAttribute('data-playing') == '1'){
                         target.className = "play_icon";
