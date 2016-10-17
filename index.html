@@ -65,7 +65,7 @@
             line-height: 1.5em;
             color: #ffffff;
             display: block;
-            opacity: 0;
+            opacity: 1;
             z-index: 2;
             min-width: 115px;
         }
@@ -116,8 +116,8 @@
         
         main {
             position: absolute;
-            left: 10%;
-            top: 0%;
+            left: 30%;
+            top: 10%;
             overflow: visible;
             background: transparent;
             height: 90%;
@@ -311,10 +311,6 @@
             position: absolute;
             height: 100%;
         }
-
-        .pause_icon, .play_icon, .audio_off, .audio_off_on, .linkedin, .github, .soundcloud{
-            background: url("media/sprites.png") no-repeat;
-        }
         
         .play_icon{
             background-position: -50px 0;
@@ -373,56 +369,15 @@
 
 <body>
     <div id="visualisation"></div>
-    <div id="loader_webgl_frame"></div>
-    <div id="soundcloud_logo"><img src="/personal_website/media/powered_by_soundcloud.png" /></div>
-    <div id="audio_control" class="audio_off" data-status=1></div>
+    <div id="soundcloud_logo"><img src="../cautious-robot/media/powered_by_soundcloud.png" /></div>
     <canvas id="myCanvas" class="full_visual_player" width="100px" height="100px"></canvas>
     <main>
         <div class="innertube content-box" id="sound_box"></div>
-        <div class="innertube content-box" id="device_box"></div>
-        <span id="webgl_hint">Use your <b> mouse </b> for interaction.</p></span>
-        <div class="innertube content-box" id="visual_box">
-            <iframe id="sketches" frameborder="0"></iframe>
-        </div>
-        <div class="innertube content-box" id="webgl_box">
-            <iframe id="webgl_iframe" frameborder="0"></iframe>
-        </div>
-        
-        <div class="innertube content-box" id="cv_box">
-            <p id="processing">
-                ?
-            </p>
-        </div>
+
     </main>
-    <nav id="nav">
-        <div id="selector"></div>
-        <div class="innertube">
-            <ul id="nav_ul">
-                <li id="home">Juraj<br>Onuska</li>
-                <li><b> - naskou - </b></li>
-                <br>
-                <li id="sound">audio </li>
-                <li id="visual">canvas </li>
-                <li id="webgl">webgl </li>
-                <!--<li id="cv">author </li>-->
-            </ul>
-        </div>
-        <div id="icons">
-            <br>
-            <a href="https://www.soundcloud.com/naskou" class="soundcloud"/></a>
-            <a href="https://www.linkedin.com/in/juraj-onu%C5%A1ka-62671698" class="linkedin"></a>
-            <a href="https://www.github.com/nthe" class="github"/></a>
-        </div>
-        <div id="description">asd</div>
-        
-    </nav>
-    
-    <div class="fullscreen-bg">
-        <video loop muted autoplay class="fullscreen-bg__video">
-            <source src="media/bird.m4v" type="video/mp4">
-        </video>
-    </div>
-    <script src="media/move.min.js"></script>
+
+
+    <!--<script src="media/move.min.js"></script>-->
     <script type="text/javascript">
 
         var main_content = function() {
@@ -455,149 +410,6 @@
                 return e.target || e.srcElement; 
             }
 
-            NAV.addEventListener('click', function(event){
-                event.preventDefault();
-                var target = getEventTarget(event);
-                var id = target.getAttribute('id');
-                var pos = target.offsetTop;
-                move(SELECTOR).set("margin-top", pos - 2 + "px").set("opacity", 1).duration(speed).end();
-                if (!RENDERED[id]) fetch_content(id.toString());
-                else show_rendered(id);
-            });
-
-            function adjust_ui(_left, _top, _width, _left_back, _navigation_width, _sc_logo_opacity, _video_opacity, _webgl_hint_opacity) {
-                _sc_logo_opacity = _sc_logo_opacity || 0;
-                _video_opacity = _video_opacity || 0;
-                _webgl_hint_opacity = _webgl_hint_opacity || 0;
-                var _align = _align || 'right';
-
-                if(_video_opacity == 1){
-                    NAVB.style.background = "rgba(0, 0, 0, 0.7)";
-                    SELECTOR.style.background = "#fff";
-                    NAV.style.textAlign = 'center';
-                    SELECTOR.style.opacity = 0;
-                    ICONS.style.display = 'none';
-                    NAV.style.color = "#fff";
-                    AC.style.display = 'block';
-                    audio_2.pause();
-                } else {
-                    NAV.style.color = "#000";
-                    SELECTOR.style.background = "#000";
-                    NAV.style.textAlign = 'right';
-                    SELECTOR.style.opacity = 1;
-                    ICONS.style.display = 'block';
-                    NAVB.style.background = "rgba(0, 0, 0, 0)";
-                    AC.style.display = 'none';
-                }
-
-                
-                move(NAVB).set('width', _navigation_width).duration(speed).end();
-                move(MAIN).set('left', _left).set('top', _top).set('width', _width).duration(speed).end();
-                move(WEBGL_HINT).set('opacity', _webgl_hint_opacity).duration(speed / 2).end();
-                move(SC_LOGO).set('opacity', _sc_logo_opacity).duration(speed).end();
-                move(VID).set('opacity', _video_opacity).duration(speed).end();
-            }
-
-
-            AC.addEventListener('click', function(){
-                var status = AC.getAttribute('data-status');
-                if(status == "1"){
-                    AC.className = "audio_off_on";
-                    audio.pause();
-                    AC.setAttribute('data-status', 0);
-                } else {
-                    AC.className = "audio_off";
-                    audio.play();
-                    AC.setAttribute('data-status', 1);
-                }
-            });
-
-            function show_rendered(id) {
-                var a = document.getElementsByClassName("content-box");
-                for(var i = 0; i < a.length; i++) a[i].style.display = 'none';
-
-                switch (id) {
-                    case "home":
-                    {
-                        adjust_ui("18%", "0%", "100%", "15.3%", "7%", 0, 1);
-                        audio.volume = 0.25;
-                        if(VISUAL_PLAYER.className != 'small_visual_player'){
-                            VISUAL_PLAYER.width = 50;
-                            VISUAL_PLAYER.height = 50;
-                            VISUAL_PLAYER.className = 'small_visual_player';
-                        }
-                        audio.play();
-                        break;
-                    }
-                    case "sound":
-                    {
-                        adjust_ui("33%", "5%", "68%", "30.3%", "30%", 0.7);
-                        CONTENT_BOX_SOUND.style.display = 'block';
-                        VISUALISATION.style.display = 'block';
-                        VISUAL_PLAYER.width = 300;
-                        VISUAL_PLAYER.height = 300;
-                        VISUAL_PLAYER.className = 'full_visual_player';
-                        audio.volume = 0;
-                        audio.pause();
-                        break;
-                    }
-                    case "visual":
-                    {
-                        adjust_ui("18%", "0%", "100%", "15.3%", "15%", 0, 0, 1);
-                        CONTENT_BOX_VISUAL.style.display = 'block';
-                        if(VISUAL_PLAYER.className != 'small_visual_player'){
-                            VISUAL_PLAYER.width = 50;
-                            VISUAL_PLAYER.height = 50;
-                            VISUAL_PLAYER.className = 'small_visual_player';
-                        }
-                        audio.volume = 0;
-                        audio.pause();
-                        break;
-                    }
-                    case "webgl":
-                    {
-                        adjust_ui("18%", "0%", "100%", "15.3%", "15%", 0, 0, 1);
-                        CONTENT_BOX_WEBGL.style.display = 'block';
-                        if(VISUAL_PLAYER.className != 'small_visual_player'){
-                            VISUAL_PLAYER.width = 50;
-                            VISUAL_PLAYER.height = 50;
-                            VISUAL_PLAYER.className = 'small_visual_player';
-                        }
-                        audio.volume = 0;
-                        audio.pause();
-                        break;
-                    }
-                    case "cv":
-                    {
-                        adjust_ui("33%", "5%", "100%", "30.3%", "30%", 0, 0, 0);
-                        CONTENT_BOX_CV.style.display = 'block';
-                        if(VISUAL_PLAYER.className != 'small_visual_player'){
-                            VISUAL_PLAYER.width = 50;
-                            VISUAL_PLAYER.height = 50;
-                            VISUAL_PLAYER.className = 'small_visual_player';
-                        }
-                        audio.volume = 0;
-                        audio.pause();
-                        break;
-                    }
-                }
-            }
-
-            function fetch_content(target) {
-                if (target == "webgl") serve_webgl_content();
-                else if (target == "visual") serve_visual_content();
-                else if (target == "sound") serve_sound_content();
-                else if (target == "cv"){
-                    document.getElementById("processing").style.display = "block";
-                    show_rendered(target);
-                    RENDERED[target] = true;
-                } 
-                else if (target == "home") {
-                    show_rendered(target);
-                    RENDERED[target] = true;
-                }
-            }
-
             var request = function (_url, _success) {
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.onreadystatechange = function () {
@@ -608,14 +420,7 @@
                 xmlHttp.send();
             };
 
-            var speed = "0.5s";
-            move(NAVB).set('opacity', 1).duration(speed).end();
-
-            var audio = new Audio('media/auddd.mp3');
-            // var audio = new Audio();
-            audio.volume = 0.0;
-            audio.loop = true;
-            audio.autoplay = true;
+            serve_sound_content();
 
             /* Visual player ------------------------------------------------------------ */
             
@@ -667,63 +472,63 @@
 
             /* Visualizer ------------------------------------------------------------ */
             
-            /* 
-            // var context;
-            // if (typeof AudioContext !== "undefined") {
-            //   context = new AudioContext();
-            // } else if (typeof webkitAudioContext !== "undefined") {
-            //   context = new webkitAudioContext();
-            // } else {
-            //     document.getElementsByClassName("hideIfNoApi").style.display = 'none';
-            //     document.getElementsByClassName("showIfNoApi").style.display = 'block';
-            //   return;
-            // }
+            
+            var context;
+            if (typeof AudioContext !== "undefined") {
+              context = new AudioContext();
+            } else if (typeof webkitAudioContext !== "undefined") {
+              context = new webkitAudioContext();
+            } else {
+                document.getElementsByClassName("hideIfNoApi").style.display = 'none';
+                document.getElementsByClassName("showIfNoApi").style.display = 'block';
+              return;
+            }
 
-            // var lastTime = 0;
-            // var vendors = ['ms', 'moz', 'webkit', 'o'];
-            // for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-            //   window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-            //   window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
-            //     || window[vendors[x] + 'CancelRequestAnimationFrame'];
-            // }
+            var lastTime = 0;
+            var vendors = ['ms', 'moz', 'webkit', 'o'];
+            for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+              window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+              window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame']
+                || window[vendors[x] + 'CancelRequestAnimationFrame'];
+            }
 
-            // window.requestAnimationFrame = function (callback, element) {
-            //     var currTime = new Date().getTime();
-            //     var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            //     var id = window.setTimeout(function () { callback(currTime + timeToCall); },
-            //       timeToCall);
-            //     lastTime = currTime + timeToCall;
-            //     return id;
-            //   };
+            window.requestAnimationFrame = function (callback, element) {
+                var currTime = new Date().getTime();
+                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+                var id = window.setTimeout(function () { callback(currTime + timeToCall); },
+                  timeToCall);
+                lastTime = currTime + timeToCall;
+                return id;
+              };
 
-            // if (!window.cancelAnimationFrame)
-            //   window.cancelAnimationFrame = function (id) { clearTimeout(id); };
+            if (!window.cancelAnimationFrame)
+              window.cancelAnimationFrame = function (id) { clearTimeout(id); };
 
-            // var analyser = context.createAnalyser();
-            // analyser.connect(context.destination);
-            // analyser.fftSize = 32;
-            // var frequencyData = new Uint8Array(analyser.frequencyBinCount);            
-            // var visualisation = document.getElementById('visualisation');
-            // var barSpacingPercent = 30 / analyser.frequencyBinCount;
+            var analyser = context.createAnalyser();
+            analyser.connect(context.destination);
+            analyser.fftSize = 32;
+            var frequencyData = new Uint8Array(analyser.frequencyBinCount);            
+            var visualisation = document.getElementById('visualisation');
+            var barSpacingPercent = 30 / analyser.frequencyBinCount;
 
-            // for (var i = 0; i < analyser.frequencyBinCount; i++) {
-            //     var bar_div = document.createElement("div");
-            //     bar_div.style.left = i * barSpacingPercent * 10 + "px";
-            //     bar_div.style.opacity = 1;
-            //     visualisation.appendChild(bar_div);                
-            // }
+            for (var i = 0; i < analyser.frequencyBinCount; i++) {
+                var bar_div = document.createElement("div");
+                bar_div.style.left = i * barSpacingPercent * 10 + "px";
+                bar_div.style.opacity = 1;
+                visualisation.appendChild(bar_div);                
+            }
 
-            // function update(audio_el) {
-            //   requestAnimationFrame(update);
-            //   analyser.getByteFrequencyData(frequencyData);
+            function update(audio_el) {
+              requestAnimationFrame(update);
+              analyser.getByteFrequencyData(frequencyData);
 
-            //   if(!audio_el.paused) {
-            //     for(var i = 0; i < analyser.frequencyBinCount; i++){
-            //         visualisation.childNodes[i].style.height = (frequencyData[i]) * 0.5 + 'px';
-            //     }
-            //   }
-            // };
-            */
+              if(!audio_el.paused) {
+                for(var i = 0; i < analyser.frequencyBinCount; i++){
+                    visualisation.childNodes[i].style.height = (frequencyData[i]) * 0.5 + 'px';
+                }
+              }
+            };
+            
 
             /* SOUNDS SECTION ------------------------------------------------------------ */
             var TRACKS_COUNT = 0;
@@ -731,10 +536,10 @@
             var audio_2 = new Audio();
             audio_2.crossOrigin = "anonymous";
             audio_2.volume = 0.85;
-            /*
-            // context.createMediaElementSource(audio_2).connect(analyser);
-            // update(audio_2);
-            */
+            
+            context.createMediaElementSource(audio_2).connect(analyser);
+            update(audio_2);
+            
             visual_player(audio_2, "myCanvas");
 
             function serve_sound_content() {
@@ -742,7 +547,6 @@
                     var data = [];
                     load = JSON.parse(load);
                     for (var i = 0; i < load.length; i++) {
-                        if (load[i].tag_list.indexOf('wbsnd') > -1)
                             data.push(load[i]);
                     }
 
@@ -758,8 +562,11 @@
                         CONTENT_BOX_SOUND.appendChild(temp);
                     }
 
-                    show_rendered('sound');
-                    RENDERED['sound'] = true;
+                    CONTENT_BOX_SOUND.style.display = 'block';
+                    VISUALISATION.style.display = 'block';
+                    VISUAL_PLAYER.width = 300;
+                    VISUAL_PLAYER.height = 300;
+                    VISUAL_PLAYER.className = 'full_visual_player';
                 });
 
                 CONTENT_BOX_SOUND.addEventListener('click', function(event){ 
@@ -770,92 +577,20 @@
                     
                     if(target.childNodes.length == 2){
                         for(var i = 0; i < TRACKS_COUNT; i++) CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";
-
+                    }
+                    console.log(CONTENT_BOX_SOUND);
                     if(target.getAttribute('data-playing') == '1'){
                         target.className = "play_icon";
+                        console.log(audio_2);
                         target.setAttribute("data-playing", '0');
                         audio_2.pause();
                     } else {
                         audio_2.src = target.getAttribute('data-track');
                         target.className = "pause_icon active";
                         target.setAttribute("data-playing", '1');
+                        console.log(audio_2);
                         audio_2.autoplay = true;
                     }
-                
-                }
-            }
-                )
-                
-            }
-
-            /* VISUAL SECTION ------------------------------------------------------------ */
-            var sketches = document.getElementById("sketches");
-
-            function serve_visual_content() {
-                request("https://api.github.com/repos/nthe/p5js/contents", function (load) {
-                        var data = [];
-                        load = JSON.parse(load);
-
-                        for (var i = 0; i < load.length; i++) {
-                            if (['libraries', 'empty-example', 'README.md'].indexOf(load[i].name) < 0)
-                                data.push(load[i].name);
-                        }
-
-                        var visuals_box = document.createElement('div');
-                        visuals_box.className = 'visual-unit';
-                        CONTENT_BOX_VISUAL.appendChild(visuals_box);
-
-                        for (i = 0; i < data.length; i++) {
-                            var d = "<br><span class='visual-unit-name fingertip'>" + data[i] + "</span>";
-                            var dev_span = document.createElement('div');
-                            dev_span.innerHTML = d;
-                            visual_box.innerHTML += dev_span.innerHTML;
-                        }
-                        show_rendered('visual');
-                        RENDERED['visual'] = true;
-                    }
-                );
-
-                CONTENT_BOX_VISUAL.addEventListener('click', function(event){
-                    event.preventDefault();
-                    var target = getEventTarget(event);
-                    document.getElementById("sketches").src = "https://nthe.github.io/p5js/" + target.innerHTML + "/";
-                })
-            }
-
-            /* WEBGL SECTION ------------------------------------------------------------ */
-            var webgl_iframe = document.getElementById("webgl_iframe");
-
-            function serve_webgl_content() {
-                request("https://api.github.com/repos/nthe/webgl/contents", function (load) {
-                            var data = [];
-                            load = JSON.parse(load);
-                            
-                            for (var i = 0; i < load.length; i++) {
-                                if (['libs', 'README.md', '.gitignore'].indexOf(load[i].name) < 0)
-                                    data.push(load[i].name);
-                            }
-
-                            var visuals_box = document.createElement('div');
-                            visuals_box.className = 'visual-unit';
-                            CONTENT_BOX_WEBGL.appendChild(visuals_box);
-
-                            for (i = 0; i < data.length; i++) {
-                                var d = "<br><span class='visual-unit-name fingertip'>" + data[i] + "</span>";
-                                var dev_span = document.createElement('div');
-                                dev_span.innerHTML = d;
-                                visuals_box.innerHTML += dev_span.innerHTML;
-                            }
-
-                            show_rendered('webgl');
-                            RENDERED['webgl'] = true;
-                        }
-                );
-
-                CONTENT_BOX_WEBGL.addEventListener('click', function(event){
-                    event.preventDefault();
-                    var target = getEventTarget(event);
-                    webgl_iframe.setAttribute("src", "https://nthe.github.io/webgl/" + target.innerHTML + "/");
                 })
             }
         };
