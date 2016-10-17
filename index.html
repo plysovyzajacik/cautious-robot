@@ -328,6 +328,7 @@
                     }
 
                     TRACKS_COUNT = data.length;
+                    
                     for (i = 0; i < TRACKS_COUNT; i++) {
                         var src_load = data[i].stream_url + "?client_id=522c4502ec926a3aade851669738d8e7";
                         var str = 
@@ -349,23 +350,26 @@
                 CONTENT_BOX_SOUND.addEventListener('click', function(event){ 
                     event.preventDefault();
                     var target = getEventTarget(event);
+
+                    // return if bad element clicked
+                    if(target.className == "song-unit") return;
                     
                     target = target.parentNode;
                     
+                    for(var i = 0; i < CONTENT_BOX_SOUND.childNodes.length; i++) { CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";}
+
                     if(target.childNodes.length == 2){
-                        for(var i = 0; i < TRACKS_COUNT; i++) CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";
+                        for(var i = 0; i < CONTENT_BOX_SOUND.childNodes.length; i++) CONTENT_BOX_SOUND.childNodes[i].firstChild.className = "play_icon";
                     }
-                    console.log(CONTENT_BOX_SOUND);
+                    
                     if(target.getAttribute('data-playing') == '1'){
                         target.className = "play_icon";
-                        console.log(audio_2);
                         target.setAttribute("data-playing", '0');
                         audio_2.pause();
                     } else {
                         audio_2.src = target.getAttribute('data-track');
                         target.className = "pause_icon active";
                         target.setAttribute("data-playing", '1');
-                        console.log(audio_2);
                         audio_2.autoplay = true;
                     }
                 })
